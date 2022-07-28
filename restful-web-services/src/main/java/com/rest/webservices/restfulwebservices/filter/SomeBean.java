@@ -1,11 +1,12 @@
 package com.rest.webservices.restfulwebservices.filter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.minidev.json.annotate.JsonIgnore;
-
+@JsonIgnoreProperties(value = {"field3"})
 public class SomeBean {
     private String field1;
     private String field2;
-    @JsonIgnore
+//    @JsonIgnore
     private String field3;
 
     public SomeBean() {
