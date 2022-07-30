@@ -49,6 +49,7 @@ public class UserDaoService {
                 return user;
             }
         }
+
         return null;
     }
 
