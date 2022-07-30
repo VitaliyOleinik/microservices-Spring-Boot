@@ -15,24 +15,28 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-public class UserResource {
+public class UserJPAResource {
     @Autowired
     private UserDaoService userDaoService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/users")
     public List<User> retrieveAllUsers() {
-        return userDaoService.findAll();
+        return userRepository.findAll();
     }
 
     @GetMapping("users/{id}")
     public EntityModel<User> retrieveUser(@PathVariable int id) {
-        User user = userDaoService.findOne(id);
-        if (user == null) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
             throw new UserNotFoundException("id-" + id);
         }
-        EntityModel<User> model = EntityModel.of(user);
+        EntityModel<User> model = EntityModel.of(user.get());
         WebMvcLinkBuilder linkToUser =
                 linkTo(methodOn(this.getClass()).retrieveAllUsers());
         model.add(linkToUser.withRel("all-users"));
