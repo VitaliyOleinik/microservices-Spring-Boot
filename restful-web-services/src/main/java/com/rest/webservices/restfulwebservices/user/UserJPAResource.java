@@ -30,6 +30,15 @@ public class UserJPAResource {
         return userRepository.findAll();
     }
 
+    @GetMapping("/users/{id}/posts")
+    public List<Post> retrieveAllPostsOfUser(@PathVariable int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("id-" + id);
+        }
+        return user.get().getPosts();
+    }
+
     @GetMapping("users/{id}")
     public EntityModel<User> retrieveUser(@PathVariable int id) {
         Optional<User> user = userRepository.findById(id);
