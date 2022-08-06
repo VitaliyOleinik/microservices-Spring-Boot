@@ -10,37 +10,32 @@ import java.util.List;
 
 public class BankTransactionalAnalyzerSRP {
     private static final String RESOURCES = "src/main/resources/";
+    private static final BankStatementCSVParser bankStatementParser = new BankStatementCSVParser();
 
     public static void main(String[] args) throws IOException {
-        final BankStatementCSVParser bankStatementParser =
-                new BankStatementCSVParser();
-
 
         final String fileName = args[0];
         final Path path = Paths.get(RESOURCES + fileName);
         final List<String> lines = Files.readAllLines(path);
+
         final List<BankTransaction> bankTransactions
                 = bankStatementParser.parseLinesFromCSV(lines);
+        final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
 
-        System.out.println("The total for all transactions is " + calculateTotalAmount(bankTransactions));
-        System.out.println("Transactions in January " + selectInMonth(bankTransactions, Month.JANUARY));
-    }
+        collectSummary(bankStatementProcessor);
 
-    public static double calculateTotalAmount(final List<BankTransaction> bankTransactions) {
-        double total = 0d;
-        for (final BankTransaction bankTransaction: bankTransactions) {
-            total += bankTransaction.getAmount();
-        }
-        return total;
-    }
-
-    public static List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions, final Month month) {
-        final List<BankTransaction> bankTransactionInMonth = new ArrayList<>();
-        for (final BankTransaction bankTransaction: bankTransactions) {
-            if (bankTransaction.getDate().getMonth() == month) {
-                bankTransactionInMonth.add(bankTransaction);
             }
-        }
-        return bankTransactionInMonth;
+
+    private static void  collectSummary(final BankStatementProcessor bankStatementProcessor) {
+        System.out.println("The total for all transactions is "
+                + bankStatementProcessor.calculateTotalAmount());
+        System.out.println("Transactions in January "
+                + bankStatementProcessor.calculateTotalInMonth(Month.JANUARY));
+        System.out.println("Transactions in February "
+                + bankStatementProcessor.calculateTotalInMonth(Month.FEBRUARY));
+        System.out.println("The total salary received is"
+                + bankStatementProcessor.calculateTotalForCategory("Salary"));
+
     }
+
 }
