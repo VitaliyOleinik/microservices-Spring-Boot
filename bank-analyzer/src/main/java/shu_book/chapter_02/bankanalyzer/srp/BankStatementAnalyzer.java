@@ -5,15 +5,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
-public class BankTransactionalAnalyzerSRP {
+public class BankStatementAnalyzer {
     private static final String RESOURCES = "src/main/resources/";
     private static final BankStatementCSVParser bankStatementParser = new BankStatementCSVParser();
 
     public static void main(String[] args) throws IOException {
-
+        // Сильная связанность
         final String fileName = args[0];
         final Path path = Paths.get(RESOURCES + fileName);
         final List<String> lines = Files.readAllLines(path);
@@ -24,9 +23,21 @@ public class BankTransactionalAnalyzerSRP {
 
         collectSummary(bankStatementProcessor);
 
-            }
+    }
 
-    private static void  collectSummary(final BankStatementProcessor bankStatementProcessor) {
+    public void analyze(final String fileName, final BankStatementParser bankStatementParser)
+            throws IOException {
+        // Слабая связанность
+        final Path path = Paths.get(RESOURCES + fileName);
+        final List<String> lines = Files.readAllLines(path);
+
+        final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFrom(lines);
+        final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
+
+        collectSummary(bankStatementProcessor);
+    }
+
+    private static void collectSummary(final BankStatementProcessor bankStatementProcessor) {
         System.out.println("The total for all transactions is "
                 + bankStatementProcessor.calculateTotalAmount());
         System.out.println("Transactions in January "
