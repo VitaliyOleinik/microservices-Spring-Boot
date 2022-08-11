@@ -1,4 +1,4 @@
-package shu_book.chapter_02.bankanalyzer;
+package shu_book;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
