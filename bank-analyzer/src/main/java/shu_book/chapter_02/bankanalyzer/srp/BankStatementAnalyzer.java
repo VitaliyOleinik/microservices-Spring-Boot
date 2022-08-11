@@ -1,5 +1,7 @@
 package shu_book.chapter_02.bankanalyzer.srp;
 
+import shu_book.chapter_02.bankanalyzer.srp.ocp.BankTransactionsInFebruaryAndExpensive;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +37,10 @@ public class BankStatementAnalyzer {
         final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
 
         collectSummary(bankStatementProcessor);
+        
+        //OCP
+        final List<BankTransaction> transactions
+                = bankStatementProcessor.findTransactions(new BankTransactionsInFebruaryAndExpensive());
     }
 
     private static void collectSummary(final BankStatementProcessor bankStatementProcessor) {
