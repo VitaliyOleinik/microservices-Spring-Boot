@@ -37,10 +37,15 @@ public class BankStatementAnalyzer {
         final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
 
         collectSummary(bankStatementProcessor);
-        
+
         //OCP
         final List<BankTransaction> transactions
                 = bankStatementProcessor.findTransactions(new BankTransactionsInFebruaryAndExpensive());
+        // лямбда выражение
+        final List<BankTransaction> transactions1
+            = bankStatementProcessor.findTransactions(bankTransaction ->
+                bankTransaction.getDate().getMonth() == Month.FEBRUARY
+                && bankTransaction.getAmount() >= 1_000);
     }
 
     private static void collectSummary(final BankStatementProcessor bankStatementProcessor) {
