@@ -6,3 +6,8 @@ import shu_book.chapter_02.bankanalyzer.srp.BankTransaction;
 public interface BankTransactionFilter {
     boolean test(BankTransaction bankTransaction);
 }
+
+@FunctionalInterface
+interface BankTransactionSummarizer {
+    double summarize(double accumulator, BankTransaction bankTransaction);
+}
